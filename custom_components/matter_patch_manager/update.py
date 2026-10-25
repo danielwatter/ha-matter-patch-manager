@@ -4,7 +4,7 @@ import logging
 
 import aiohttp
 
-from homeassistant.components.update import UpdateEntity
+from homeassistant.components.update import UpdateEntity, UpdateEntityFeature
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
@@ -30,7 +30,7 @@ class MatterPatchUpdate(UpdateEntity):
 
     _attr_name = "Matter Core Patch"
     _attr_has_entity_name = False
-    _attr_supported_features = 0
+    _attr_supported_features = UpdateEntityFeature(0)
     _attr_installed_version = "installed"
     _attr_latest_version = "installed"
 
