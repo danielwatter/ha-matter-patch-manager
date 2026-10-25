@@ -42,11 +42,15 @@ restore() {
 trap restore EXIT
 
 # Download compare diff, pinned locally by SHA256 in the log. No whole-file replacement.
-URL="https://github.com/$REPO/compare/dev...${BRANCH}.diff"
+BASE_COMMIT="b447592b754e03f9c9f7068dbb87bd039352d49f"
+PATCH_COMMIT="5fd5ed228f03aebc7b8a29c6ac5733664de9a4ba"
+EXPECTED_SHA256="8d5cfba222a4181d5493b701ca4932719acfae640348a0fe0d935198d3c67450"
+URL="https://github.com/$REPO/compare/${BASE_COMMIT}...${PATCH_COMMIT}.diff"
 echo "Lade Diff: $URL"
 curl --fail --location --silent --show-error --max-time 45 "$URL" -o "$WORK/full.diff" || { echo 'ABBRUCH: Diff konnte nicht geladen werden'; exit 1; }
 [ "$(wc -c < "$WORK/full.diff")" -lt 300000 ] || { echo 'ABBRUCH: Diff unerwartet gross'; exit 1; }
-sha256sum "$WORK/full.diff"
+echo "$EXPECTED_SHA256  $WORK/full.diff" | sha256sum --check --status || { echo "ABBRUCH: Patch-Pruefsumme stimmt nicht"; exit 1; }
+echo "SHA256 verifiziert: $EXPECTED_SHA256"
 
 # Reject changes to other production files, unexpected diffs, missing marker lines.
 python3 - "$WORK/full.diff" "$NAME" "${FILES[@]}" <<'PYVALIDATE'
