@@ -3,8 +3,16 @@
     "step": {
       "user": {
         "title": "Matter Core Patch Manager",
-        "description": "Read-only foundation. Patch checking and installation are not enabled yet."
+        "description": "Connect to the local read-only status bridge. Installation remains disabled.",
+        "data": {
+          "bridge_url": "Bridge URL (local only)",
+          "bridge_token": "Bridge access token"
+        }
       }
+    },
+    "error": {
+      "cannot_connect": "Cannot authenticate with the status bridge.",
+      "invalid_url": "Only http://127.0.0.1:18764 is allowed."
     },
     "abort": {
       "already_configured": "Already configured."
