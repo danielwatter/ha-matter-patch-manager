@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="Matter Core Patch Manager">
+<defs><linearGradient id="g" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#18b7e8"/><stop offset="1" stop-color="#2462bf"/></linearGradient></defs>
+<rect x="12" y="12" width="232" height="232" rx="56" fill="url(#g)"/>
+<path d="M128 40 205 70v52c0 49-29 78-77 100-48-22-77-51-77-100V70z" fill="#fff" opacity=".96"/>
+<path d="M128 58 187 81v42c0 37-20 60-59 80-39-20-59-43-59-80V81z" fill="#0a4b86"/>
+<path d="M111 90h34v17a12 12 0 1 1 0 24v18h-17a12 12 0 1 1-24 0H87v-34h17a12 12 0 1 1 7-25z" fill="#fff"/>
+<circle cx="176" cy="179" r="28" fill="#16c79a" stroke="#fff" stroke-width="7"/>
+<path d="m163 179 9 9 18-20" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
