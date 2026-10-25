@@ -1,4 +1,4 @@
-"""Read-only Matter Core Patch update entity; installation is disabled."""
+"""Matter Core Patch update entity with manual installation support."""
 
 import logging
 
@@ -21,7 +21,7 @@ async def async_setup_entry(
     entry: ConfigEntry,
     async_add_entities: AddConfigEntryEntitiesCallback,
 ) -> None:
-    """Register the read-only update entity."""
+    """Register the update entity."""
     async_add_entities([MatterPatchUpdate(hass, entry)], update_before_add=True)
 
 
@@ -30,7 +30,7 @@ class MatterPatchUpdate(UpdateEntity):
 
     _attr_name = "Matter Core Patch"
     _attr_has_entity_name = False
-    _attr_supported_features = UpdateEntityFeature(0)
+    _attr_supported_features = UpdateEntityFeature.INSTALL
     _attr_installed_version = "installed"
     _attr_latest_version = "installed"
 
@@ -65,3 +65,20 @@ class MatterPatchUpdate(UpdateEntity):
         self._attr_installed_version = "unpatched" if status == "available" else "patched"
         self._attr_latest_version = "patched"
         self._attr_available = True
+
+    async def async_install(self, version: str | None, backup: bool, **kwargs) -> None:
+        """Install only when explicitly requested by Home Assistant."""
+        if version is not None or backup:
+            raise ValueError("Specific versions and backups are not supported")
+        session = async_get_clientsession(self._hass)
+        async with session.post(
+            self._entry.data[CONF_BRIDGE_URL] + "/install",
+            headers={"Authorization": f"Bearer {self._entry.data[CONF_BRIDGE_TOKEN]}"},
+            timeout=aiohttp.ClientTimeout(total=300),
+        ) as response:
+            response.raise_for_status()
+            result = await response.json()
+            if result.get("status") != "installed":
+                raise ValueError("Patch installation not confirmed by bridge")
+        await self.async_update()
+        self.async_write_ha_state()
