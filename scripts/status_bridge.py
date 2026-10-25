@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Local bridge. Installation remains disabled until explicitly implemented."""
+"""Local bridge for Matter patch status and capability checks."""
 import hmac
 import json
 import os
