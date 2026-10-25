@@ -1,0 +1,13 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Matter Core Patch Manager",
+        "description": "Read-only foundation. Patch checking and installation are not enabled yet."
+      }
+    },
+    "abort": {
+      "already_configured": "Already configured."
+    }
+  }
+}
