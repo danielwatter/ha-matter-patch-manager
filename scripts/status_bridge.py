@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Local read-only status bridge. Run only inside Advanced SSH & Web Terminal."""
+"""Local bridge. Installation remains disabled until explicitly implemented."""
 import hmac
 import json
 import os
@@ -10,6 +10,7 @@ HOST = "127.0.0.1"
 PORT = 18764
 SCRIPT = "/config/core_patches/check_matter_patch.sh"
 TOKEN_FILE = "/config/core_patches/bridge_token"
+INSTALL_SCRIPT = "/config/custom_components/matter_patch_manager/scripts/patch_matter.sh"
 
 def read_token():
     st = os.stat(TOKEN_FILE)
@@ -25,11 +26,17 @@ TOKEN = read_token()
 
 class Handler(BaseHTTPRequestHandler):
     def do_GET(self):
-        if self.path != "/status":
+        if self.path not in ("/status", "/capabilities"):
             return self.respond(404, {"error": "not_found"})
         supplied = self.headers.get("Authorization", "")
         if not hmac.compare_digest(supplied, "Bearer " + TOKEN):
             return self.respond(401, {"error": "unauthorized"})
+        if self.path == "/capabilities":
+            return self.respond(200, {
+                "status_check": True,
+                "install_script_present": os.path.isfile(INSTALL_SCRIPT) and os.access(INSTALL_SCRIPT, os.R_OK),
+                "installation_enabled": False,
+            })
         try:
             result = subprocess.run(
                 ["bash", SCRIPT], capture_output=True, text=True,
