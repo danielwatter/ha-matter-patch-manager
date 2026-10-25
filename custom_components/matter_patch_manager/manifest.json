@@ -1,7 +1,7 @@
 {
   "domain": "matter_patch_manager",
   "name": "Matter Core Patch Manager",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "documentation": "https://github.com/danielwatter/ha-matter-patch-manager",
   "issue_tracker": "https://github.com/danielwatter/ha-matter-patch-manager/issues",
   "codeowners": [
